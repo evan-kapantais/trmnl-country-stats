@@ -4,6 +4,10 @@
     {
       "src": "/data",
       "dest": "/api/data"
+    },
+    {
+      "src": "/data/(.*)",
+      "dest": "/api/data/$1"
     }
   ]
 }
