@@ -207,11 +207,38 @@ app.get("/data", async (req, res) => {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const { data } = await response.json();
+
+    data.area = data.area.toLocaleString();
+    data.population = data.population.toLocaleString();
+
     res.status(200).json(data);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch data" });
+    res.status(500).json({ error: `Failed to fetch data: ${error.message}` });
+  }
+});
+
+app.get("/data/:country", async (req, res) => {
+  try {
+    const fetch = (await import("node-fetch")).default;
+    const country = req.params.country;
+    const apiUrl = `https://countries-api-abhishek.vercel.app/countries/${country}`;
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+
+    const { data } = await response.json();
+
+    data.area = data.area.toLocaleString();
+    data.population = data.population.toLocaleString();
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: `Failed to fetch data: ${error.message}` });
   }
 });
 
